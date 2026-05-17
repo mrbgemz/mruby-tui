@@ -4,9 +4,10 @@ module TUI
   ##
   # {TUI::HBox} arranges children horizontally.
   #
-  # Children with an explicit +width+ keep that width.
-  # Children with +nil+ width are treated as flexible
-  # and share the remaining horizontal space.
+  # Children with an explicit +width+ keep that width. Integer widths are
+  # treated as fixed columns. Float widths between 0 and 1 are treated as
+  # percentages of the parent width. Children with +nil+ width are treated
+  # as flexible and share the remaining horizontal space.
   class HBox < Widget
     ##
     # @param (see TUI::Widget#initialize)
@@ -39,15 +40,16 @@ module TUI
       cx = ax
       parent_h = rh
       total_fixed_w = 0
-      @fixed.each { total_fixed_w += _1.rw }
+      @fixed.each { total_fixed_w += resolved_width(_1) }
       remaining = [rw - total_fixed_w, 0].max
       flex_count = @flex.size
       @children.each do |child|
         child.x = cx - ax
         child.y = 0
         if child.width
-          child.resolve!(height: parent_h)
-          cx += child.rw
+          width = resolved_width(child)
+          child.resolve!(width:, height: parent_h)
+          cx += width
         else
           share = flex_count.zero? ? 0 : remaining / flex_count
           child.resolve!(width: share, height: parent_h)
@@ -57,6 +59,14 @@ module TUI
         end
       end
       super
+    end
+
+    private
+
+    def resolved_width(child)
+      width = child.width
+      return (rw * width).floor if Float === width && width >= 0 && width <= 1
+      width.to_i
     end
   end
 end
