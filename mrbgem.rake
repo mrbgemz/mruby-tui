@@ -33,5 +33,10 @@ MRuby::Gem::Specification.new("mruby-tui") do |spec|
     mrblib/tui/widgets/tree.rb
     mrblib/tui/widgets/tab_bar.rb
     mrblib/tui/widgets/tab_panel.rb
+    mrblib/tui/widgets/markdown.rb
+    mrblib/tui/widgets/markdown/inline.rb
+    mrblib/tui/widgets/markdown/wrap.rb
+    mrblib/tui/widgets/markdown/table.rb
+    mrblib/tui/widgets/markdown/renderer.rb
   ].map { File.expand_path(_1, __dir__) }
 end

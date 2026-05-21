@@ -71,6 +71,13 @@ table = TUI::Table.new(
 end
 ```
 
+#### Markdown
+
+```ruby
+ast = Markdown.new("# Hello\n\n**world**").ast
+markdown = TUI::Markdown.new(ast:)
+```
+
 #### Tree
 
 ```ruby
@@ -140,6 +147,11 @@ or callable source.
 **TUI::Table**<br>
 Selectable, scrollable table with column headers, vim-style key
 bindings, scrollbar, and selected-row highlighting.
+
+**TUI::Markdown**<br>
+Scrollable markdown AST renderer for documents produced by
+mruby-markdown. Paragraphs wrap at render time, and tables use a grid
+or stacked fallback depending on width.
 
 **TUI::Tree**<br>
 Expandable/collapsible tree with nested nodes, keyboard navigation,
