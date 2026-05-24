@@ -82,8 +82,19 @@ class TUI::Markdown
     # @param [Integer] width
     # @return [Array<Array<Hash>>]
     def quote_rows(node, width)
-      rows = render_blocks(@inline.children_of(node), width)
-      squeeze_blank_quote_rows(rows).map { |row| style_quote_row(row) }
+      prefix = "> "
+      inner_width = [width - prefix.length, 1].max
+      children = @inline.children_of(node)
+      rows = if children.all? { |child| @inline.inline_container?(child) }
+        @wrap.segments(@inline.segments(children), inner_width)
+      else
+        render_blocks(children, inner_width)
+      end
+      squeeze_blank_quote_rows(rows).map do |row|
+        style_quote_row(
+          prefix_block([row], prefix, prefix, @theme[:quote_fg])[0] || []
+        )
+      end
     end
 
     ##
