@@ -167,6 +167,10 @@ module TUI
 
     ##
     # @api private
+    # @param [Hash] segment
+    # @param [Integer] x
+    # @param [Integer] ay
+    # @param [Integer] dy
     # @return [Integer]
     def hr(segment, x, ay, dy)
       TUI.hline(

@@ -57,7 +57,7 @@ class TUI::Markdown
         style = @inline.merge_style(@inline.base_style, fg: @theme[:heading_fg], bold: true)
         @wrap.segments(@inline.segments(@inline.children_of(node), style), width)
       when :quote
-        prefix_block(render_blocks(@inline.children_of(node), [width - 2, 1].max), "> ", "> ", @theme[:quote_fg])
+        quote_rows(node, width)
       when :code_block
         render_code_block(node, width)
       when :hr
@@ -73,6 +73,57 @@ class TUI::Markdown
         children = @inline.children_of(node)
         return @wrap.segments(@inline.segments(children), width) if @inline.inline_container?(node)
         render_blocks(children, width)
+      end
+    end
+
+    ##
+    # @api private
+    # @param [Hash] node
+    # @param [Integer] width
+    # @return [Array<Array<Hash>>]
+    def quote_rows(node, width)
+      rows = render_blocks(@inline.children_of(node), width)
+      squeeze_blank_quote_rows(rows).map { |row| style_quote_row(row) }
+    end
+
+    ##
+    # @api private
+    # Collapse consecutive blank quote rows and drop trailing empty rows so
+    # quoted blocks do not render extra vertical whitespace.
+    #
+    # @param [Array<Array<Hash>>] rows
+    # @return [Array<Array<Hash>>]
+    def squeeze_blank_quote_rows(rows)
+      out = []
+      blank_run = false
+      rows.each do |row|
+        if blank_quote_row?(row)
+          next if blank_run
+          blank_run = true
+          out << []
+        else
+          blank_run = false
+          out << row
+        end
+      end
+      out
+    end
+
+    ##
+    # @api private
+    # @param [Array<Hash>] row
+    # @return [Boolean]
+    def blank_quote_row?(row)
+      row.empty? || row.all? { |segment| segment[:text].to_s.strip.empty? }
+    end
+
+    ##
+    # @api private
+    # @param [Array<Hash>] row
+    # @return [Array<Hash>]
+    def style_quote_row(row)
+      row.map do |segment|
+        segment.merge(fg: @theme[:quote_fg], italic: true)
       end
     end
 
