@@ -61,7 +61,8 @@ class TUI::Markdown
       when :code_block
         render_code_block(node, width)
       when :hr
-        [[@wrap.segment("-" * width, fg: @theme[:rule_fg], bg: @theme[:bg])]]
+        [[{hr: true, width: width, ch: 0x2500, fg: @theme[:rule_fg], bg: @theme[:bg],
+           bold: false, italic: false, underline: false}]]
       when :ul
         render_list(node, width, false)
       when :ol

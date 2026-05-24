@@ -96,6 +96,24 @@ module TUI
   end
 
   ##
+  # Draw a horizontal line using repeated cells.
+  #
+  # @param [Integer] x
+  # @param [Integer] y
+  # @param [Integer] width
+  # @param [Integer, String] ch Unicode codepoint or single-character string
+  # @param [Integer, Symbol] fg foreground colour or symbol key from {TUI::COLORS}
+  # @param [Integer, Symbol] bg background colour or symbol key from {TUI::COLORS}
+  # @return [void]
+  def self.hline(x, y, width, ch = 0x2500, fg: :white, bg: :default)
+    return if width <= 0
+    cell = Integer === ch ? ch : ch.ord
+    width.times do |dx|
+      set_cell(x + dx, y, cell, fg, bg)
+    end
+  end
+
+  ##
   # Flush the back buffer to the terminal.
   #
   # @return [void]

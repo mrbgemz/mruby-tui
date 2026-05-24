@@ -29,10 +29,7 @@ module TUI
     # @return [void]
     def render
       return if rw <= 0 || rh <= 0
-      ch = Integer === @ch ? @ch : @ch.ord
-      rw.times do |dx|
-        TUI.set_cell(ax + dx, ay, ch, @fg, @bg)
-      end
+      TUI.hline(ax, ay, rw, @ch, fg: @fg, bg: @bg)
       super
     end
   end

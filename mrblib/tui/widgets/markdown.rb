@@ -142,13 +142,17 @@ module TUI
     def render_row(row, dy)
       x = ax
       row.each do |segment|
-        text = segment[:text].to_s
-        next if text.empty?
-        TUI.print(x, ay + dy, segment_fg(segment), segment[:bg] || @theme[:bg], text)
-        x += text.length
+        if segment[:hr]
+          x += hr(segment, x, ay, dy)
+        else
+          text = segment[:text].to_s
+          next if text.empty?
+          TUI.print(x, ay + dy, segment_fg(segment), segment[:bg] || @theme[:bg], text)
+          x += text.length
+        end
       end
     end
-    
+
     ##
     # @api private
     # @param [Hash] segment
@@ -159,6 +163,21 @@ module TUI
       fg |= TUI::Attr::ITALIC if segment[:italic]
       fg |= TUI::Attr::UNDERLINE if segment[:underline]
       fg
+    end
+
+    ##
+    # @api private
+    # @return [Integer]
+    def hr(segment, x, ay, dy)
+      TUI.hline(
+        x,
+        ay + dy,
+        segment[:width].to_i,
+        segment[:ch] || 0x2500,
+        fg: segment_fg(segment),
+        bg: segment[:bg] || @theme[:bg]
+      )
+      segment[:width].to_i
     end
   end
 end
