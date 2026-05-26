@@ -8,7 +8,7 @@ MRuby::Gem::Specification.new("mruby-tui") do |spec|
   spec.version = TUI::VERSION
   spec.description = "A small terminal UI runtime for mruby"
 
-  spec.add_dependency "mruby-termbox2", github: "pusewicz/mruby-termbox2", branch: "main"
+  spec.add_dependency "mruby-termbox2", github: "0x1eef/mruby-termbox2", branch: "main"
 
   spec.rbfiles = %w[
     mrblib/tui/version.rb
