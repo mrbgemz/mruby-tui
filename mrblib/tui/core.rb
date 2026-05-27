@@ -21,6 +21,19 @@ module TUI
   end
 
   ##
+  # Non-blocking event poll. Returns an event if one
+  # is available within the given timeout, or nil if
+  # the timeout expires.
+  #
+  # @param [Integer] timeout_ms
+  #  Timeout in milliseconds
+  # @return [Termbox2::Event, nil]
+  def self.peek_event(timeout_ms = 0)
+    ev = Termbox2.peek_event(timeout_ms)
+    ev&.extend(Event)
+  end
+
+  ##
   # @return [Integer] the terminal width in columns
   def self.width
     Termbox2.width
