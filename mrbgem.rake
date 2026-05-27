@@ -25,6 +25,7 @@ MRuby::Gem::Specification.new("mruby-tui") do |spec|
     mrblib/tui/widgets/fill.rb
     mrblib/tui/widgets/label.rb
     mrblib/tui/widgets/input.rb
+    mrblib/tui/widgets/textarea.rb
     mrblib/tui/widgets/progress_bar.rb
     mrblib/tui/widgets/banner.rb
     mrblib/tui/widgets/table.rb
