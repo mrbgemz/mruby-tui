@@ -10,7 +10,7 @@ MRuby::Gem::Specification.new("mruby-tui") do |spec|
 
   spec.add_dependency "mruby-termbox2",
     github: "0x1eef/mruby-termbox2",
-    branch: "v0.3.3"
+    branch: "v0.4.0"
 
   spec.rbfiles = %w[
     mrblib/tui/version.rb
