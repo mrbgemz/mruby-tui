@@ -135,6 +135,40 @@ module TUI
   end
 
   ##
+  # Queue raw bytes for the terminal.
+  #
+  # This is intentionally small and low-level. It is mainly used for terminal
+  # control sequences that termbox2 does not model in its cell buffer. Prefer
+  # higher-level helpers like {scroll_region} when one exists.
+  #
+  # @param [String] bytes
+  # @return [void]
+  def self.send_bytes(bytes)
+    Termbox2.send_bytes(bytes.to_s)
+  end
+
+  ##
+  # Scroll a rectangular terminal region using terminal-native operations.
+  #
+  # +y+ and +height+ are zero-based screen coordinates. A positive +delta+
+  # scrolls the region up; a negative +delta+ scrolls it down. The terminal
+  # exposes blank lines at the opposite edge. Callers should repaint those
+  # exposed rows and then {present}. This is much cheaper than repainting a
+  # whole viewport for one-line scrolling over SSH.
+  #
+  # The primitive lives in termbox2 so its front buffer is scrolled along with
+  # the physical terminal. That keeps the next {present} cheap and correct: the
+  # caller only needs to repaint the rows exposed by the scroll.
+  #
+  # @param [Integer] y
+  # @param [Integer] height
+  # @param [Integer] delta
+  # @return [Boolean] true when the scroll operation succeeds
+  def self.scroll_region(y, height, delta)
+    Termbox2.scroll_region(y.to_i, height.to_i, delta.to_i)
+  end
+
+  ##
   # Clear the back buffer.
   #
   # @return [void]
